@@ -5,7 +5,8 @@
   "repository": "https://github.com/likecoin-pro/crypto.js.git",
   "license": "MIT",
   "scripts": {
-    "build": "rollup -c"
+    "build": "rollup -c",
+    "test": "karma start --single-run"
   },
   "dependencies": {
     "js-sha3": "^0.7.0",
