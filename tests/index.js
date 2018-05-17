@@ -27,7 +27,7 @@ describe("privateKeyBySecret", function () {
 
 describe("publicKeyByPrivate", function () {
     it("should generate public key from private", function () {
-        const privateKey = crypto.privateKeyBySecret("abc");
+        const privateKey = "0xd85f68a0dd6b2ebeb5a60b47b70d2e4b63a842ac0510116e2d52f153e535cd61";
         const publicKey = crypto.publicKeyByPrivate(privateKey);
         expect(publicKey).toEqual("0x022f86f8c408c20e8bdcef6471676a2157624915355fe662b568ac5e2a2a76fed5d34d4a184176a3e4a28bac7203a860510e363601f7c8f8657067173ed83f6e");
     });
@@ -35,8 +35,7 @@ describe("publicKeyByPrivate", function () {
 
 describe("addressByPublic", function () {
     it("should return address from public key", function () {
-        const privateKey = crypto.privateKeyBySecret("abc");
-        const publicKey = crypto.publicKeyByPrivate(privateKey);
+        const publicKey = "0x022f86f8c408c20e8bdcef6471676a2157624915355fe662b568ac5e2a2a76fed5d34d4a184176a3e4a28bac7203a860510e363601f7c8f8657067173ed83f6e";
         const addrHex = crypto.addressByPublic(publicKey);
         expect(addrHex).toEqual("0x9a8a9d2b5766b5c3962f4dd301c01765bdc37a6387f24250");
     });

@@ -1,11 +1,8 @@
 import r from 'jsrsasign';
 import sha3 from 'js-sha3';
 
-const CryptoJS = r.CryptoJS;
 const BigInteger = r.BigInteger;
-const ECDSA = r.ECDSA;
 const KJUR = r.KJUR;
-
 const shake256 = sha3.shake256;
 const ecdsa = new KJUR.crypto.ECDSA({curve: "secp256k1"});
 const ecdsaKeyLen = ecdsa.ecparams.keylen / 4;
