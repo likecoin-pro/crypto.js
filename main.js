@@ -1,10 +1,10 @@
-import r from 'jsrsasign';
+import jsrsasign from 'jsrsasign';
 import sha3 from 'js-sha3';
 
-const BigInteger = r.BigInteger;
-const KJUR = r.KJUR;
+const BigInteger = jsrsasign.BigInteger;
+const ECDSA = jsrsasign.KJUR.crypto.ECDSA;
 const shake256 = sha3.shake256;
-const ecdsa = new KJUR.crypto.ECDSA({curve: "secp256k1"});
+const ecdsa = new ECDSA({curve: "secp256k1"});
 const ecdsaKeyLen = ecdsa.ecparams.keylen / 4;
 
 function trimHexPrefix(s) {
@@ -27,11 +27,12 @@ function normInt(b) {
     return new BigInteger(b, 16).mod(ecdsa.ecparams.n).add(BigInteger.ONE).toString(16);
 }
 
-KJUR.crypto.ECDSA.biRSSigToASN1Sig = function (x, y) {
+// redefine standard ECDSA-functions
+ECDSA.biRSSigToASN1Sig = function (x, y) {
     return ("000000000000000" + x.toString(16)).slice(-ecdsaKeyLen)
         + ("000000000000000" + y.toString(16)).slice(-ecdsaKeyLen);
 };
-KJUR.crypto.ECDSA.parseSigHex = function (signHex) {
+ECDSA.parseSigHex = function (signHex) {
     return {
         r: new BigInteger(signHex.substr(0, ecdsaKeyLen), 16),
         s: new BigInteger(signHex.substr(ecdsaKeyLen), 16)
