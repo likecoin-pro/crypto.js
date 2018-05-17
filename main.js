@@ -46,7 +46,7 @@ function hash(data) {
 }
 
 function privateKeyBySecret(secret) {
-    return "0x" + normInt(this.xhash(secret).toString().substring(0, ecdsaKeyLen))
+    return "0x" + normInt(xhash(secret).toString().substring(0, ecdsaKeyLen))
 }
 
 function xhash(data) {
