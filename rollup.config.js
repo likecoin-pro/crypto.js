@@ -1,4 +1,5 @@
 // rollup.config.js
+import babel from 'rollup-plugin-babel';
 import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
 import uglify from 'rollup-plugin-uglify';
@@ -17,6 +18,10 @@ const getBuild = (minified = false) => ({
         format: 'iife'
     }],
     plugins: [
+        babel({
+            exclude: 'node_modules/**',
+            runtimeHelpers: false
+        }),
         resolve(),
         commonjs(),
         minified ? uglify() : () => null

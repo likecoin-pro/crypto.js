@@ -1049,22 +1049,21 @@ var jsrsasign = {
 	lang: lang
 };
 
-const BigInteger$1 = jsrsasign.BigInteger;
-const ECDSA$1 = jsrsasign.crypto.ECDSA;
+var BigInteger$1 = jsrsasign.BigInteger;
+var ECDSA$1 = jsrsasign.crypto.ECDSA;
 
-const shake256 = sha3.shake256;
-const ecdsa = new ECDSA$1({curve: "secp256k1"});
-const ecdsaKeyLen = ecdsa.ecparams.keylen / 4;
+var shake256 = sha3.shake256;
+var ecdsa = new ECDSA$1({ curve: "secp256k1" });
+var ecdsaKeyLen = ecdsa.ecparams.keylen / 4;
 
 ECDSA$1.biRSSigToASN1Sig = function (x, y) {
-    return ("000000000000000" + x.toString(16)).slice(-ecdsaKeyLen)
-        + ("000000000000000" + y.toString(16)).slice(-ecdsaKeyLen);
+    return ("000000000000000" + x.toString(16)).slice(-ecdsaKeyLen) + ("000000000000000" + y.toString(16)).slice(-ecdsaKeyLen);
 };
 ECDSA$1.parseSigHex = function (signHex) {
     return {
         r: new BigInteger$1(signHex.substr(0, ecdsaKeyLen), 16),
         s: new BigInteger$1(signHex.substr(ecdsaKeyLen), 16)
-    }
+    };
 };
 
 function trimHexPrefix(s) {
@@ -1073,10 +1072,11 @@ function trimHexPrefix(s) {
 
 function hexToArray(s) {
     s = trimHexPrefix(s);
-    const n = s.length >> 1;
-    const a = new Array(n);
-    for (let i = 0; i < n; i++) a[i] = parseInt(s.substr(i << 1, 2), 16);
-    return a;
+    var n = s.length >> 1;
+    var a = new Array(n);
+    for (var i = 0; i < n; i++) {
+        a[i] = parseInt(s.substr(i << 1, 2), 16);
+    }return a;
 }
 
 function newBigInt(s) {
@@ -1093,45 +1093,45 @@ function hash(data) {
 }
 
 function privateKeyBySecret(secret) {
-    return "0x" + normInt(xhash(secret).toString().substring(0, ecdsaKeyLen))
+    return "0x" + normInt(xhash(secret).toString().substring(0, ecdsaKeyLen));
 }
 
 function xhash(data) {
-    const n = 200003;
-    const a = new Array(n);
-    for (let i = 0; i < n; i++) {
+    var n = 200003;
+    var a = new Array(n);
+    for (var i = 0; i < n; i++) {
         data = shake256.create(256).update(data).array();
         a[i] = data.slice(-16);
     }
     a.sort(function (a, b) {
-        for (let i = 0; i < 64; i++) if (a[i] !== b[i]) return a[i] < b[i] ? -1 : 1;
-        return 0;
+        for (var _i = 0; _i < 64; _i++) {
+            if (a[_i] !== b[_i]) return a[_i] < b[_i] ? -1 : 1;
+        }return 0;
     });
-    const h512 = shake256.create(512);
-    for (let i = 0; i < n; i++) h512.update(a[i]);
-    return h512.toString();
+    var h512 = shake256.create(512);
+    for (var _i2 = 0; _i2 < n; _i2++) {
+        h512.update(a[_i2]);
+    }return h512.toString();
 }
 
 function publicKeyByPrivate(prv) {
-    const m = ecdsa.ecparams.G.multiply(newBigInt(prv));
-    return "0x"
-        + ("000000000000000" + m.getX().toBigInteger().toString(16)).slice(-ecdsaKeyLen)
-        + ("000000000000000" + m.getY().toBigInteger().toString(16)).slice(-ecdsaKeyLen);
+    var m = ecdsa.ecparams.G.multiply(newBigInt(prv));
+    return "0x" + ("000000000000000" + m.getX().toBigInteger().toString(16)).slice(-ecdsaKeyLen) + ("000000000000000" + m.getY().toBigInteger().toString(16)).slice(-ecdsaKeyLen);
 }
 
 function addressByPublic(pubHex) {
-    let h = hexToArray(pubHex);
+    var h = hexToArray(pubHex);
     h = shake256.create(512).update(h).array();
     h = shake256.create(512).update(h);
     return "0x" + h.toString().slice(-48);
 }
 
-const crypto$1 = {
-    hash,
-    xhash,
-    privateKeyBySecret,
-    publicKeyByPrivate,
-    addressByPublic
+var crypto$1 = {
+    hash: hash,
+    xhash: xhash,
+    privateKeyBySecret: privateKeyBySecret,
+    publicKeyByPrivate: publicKeyByPrivate,
+    addressByPublic: addressByPublic
 };
 
 module.exports = crypto$1;
