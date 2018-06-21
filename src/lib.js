@@ -1,14 +1,27 @@
-import r from 'jsrsasign';
 import sha3 from 'js-sha3';
 
-const CryptoJS = r.CryptoJS;
-const BigInteger = r.BigInteger;
-const ECDSA = r.ECDSA;
-const KJUR = r.KJUR;
+import 'jsrsasign/ext/prng4';
+import 'jsrsasign/ext/rng';
+import 'jsrsasign/ext/jsbn';
+import 'jsrsasign/src/ecdsa-modified-1.0';
+
+const BigInteger = window.BigInteger;
+const ECDSA = window.KJUR.crypto.ECDSA;
 
 const shake256 = sha3.shake256;
-const ecdsa = new KJUR.crypto.ECDSA({curve: "secp256k1"});
+const ecdsa = new ECDSA({curve: "secp256k1"});
 const ecdsaKeyLen = ecdsa.ecparams.keylen / 4;
+
+ECDSA.biRSSigToASN1Sig = function (x, y) {
+    return ("000000000000000" + x.toString(16)).slice(-ecdsaKeyLen)
+        + ("000000000000000" + y.toString(16)).slice(-ecdsaKeyLen);
+};
+ECDSA.parseSigHex = function (signHex) {
+    return {
+        r: new BigInteger(signHex.substr(0, ecdsaKeyLen), 16),
+        s: new BigInteger(signHex.substr(ecdsaKeyLen), 16)
+    }
+};
 
 function trimHexPrefix(s) {
     return s.substr(0, 2) === "0x" ? s.substr(2) : s;
@@ -30,18 +43,8 @@ function normInt(b) {
     return new BigInteger(b, 16).mod(ecdsa.ecparams.n).add(BigInteger.ONE).toString(16);
 }
 
-KJUR.crypto.ECDSA.biRSSigToASN1Sig = function (x, y) {
-    return ("000000000000000" + x.toString(16)).slice(-ecdsaKeyLen)
-        + ("000000000000000" + y.toString(16)).slice(-ecdsaKeyLen);
-};
-KJUR.crypto.ECDSA.parseSigHex = function (signHex) {
-    return {
-        r: new BigInteger(signHex.substr(0, ecdsaKeyLen), 16),
-        s: new BigInteger(signHex.substr(ecdsaKeyLen), 16)
-    }
-};
-
 function hash(data) {
+    console.info('sss');
     return shake256.create(256).update(data).toString();
 }
 
@@ -79,12 +82,4 @@ function addressByPublic(pubHex) {
     return "0x" + h.toString().slice(-48);
 }
 
-const crypto = {
-    hash,
-    xhash,
-    privateKeyBySecret,
-    publicKeyByPrivate,
-    addressByPublic
-};
-
-export default crypto;
+export {hash, xhash, privateKeyBySecret, publicKeyByPrivate, addressByPublic};

@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "js-sha3": "^0.7.0",
-    "jsrsasign": "^8.0.12"
+    "jsrsasign": "https://github.com/kjur/jsrsasign"
   },
   "devDependencies": {
     "jasmine": "^3.1.0",
