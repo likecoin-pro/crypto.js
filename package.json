@@ -1,6 +1,6 @@
 {
   "name": "likecoin-crypto.js",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "main": "index.js",
   "repository": "https://github.com/likecoin-pro/crypto.js.git",
   "license": "MIT",
@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "js-sha3": "^0.7.0",
-    "jsrsasign": "https://github.com/kjur/jsrsasign"
+    "jsrsasign": "^8.0.12"
   },
   "devDependencies": {
     "jasmine": "^3.1.0",

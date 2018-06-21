@@ -1174,9 +1174,9 @@ jsprim@^1.2.2:
     json-schema "0.2.3"
     verror "1.10.0"
 
-"jsrsasign@https://github.com/kjur/jsrsasign":
-  version "0.0.0"
-  resolved "https://github.com/kjur/jsrsasign#d282c71cee92000c4807bcbf2212fedf3f22bd84"
+jsrsasign@^8.0.12:
+  version "8.0.12"
+  resolved "https://registry.yarnpkg.com/jsrsasign/-/jsrsasign-8.0.12.tgz#22abb9656d34a30b9530436720835e89c2e5c316"
 
 karma-chrome-launcher@^2.2.0:
   version "2.2.0"

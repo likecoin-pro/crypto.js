@@ -1,12 +1,8 @@
 import sha3 from 'js-sha3';
+import KJUR from 'jsrsasign/lib/jsrsasign'
 
-import 'jsrsasign/ext/prng4';
-import 'jsrsasign/ext/rng';
-import 'jsrsasign/ext/jsbn';
-import 'jsrsasign/src/ecdsa-modified-1.0';
-
-const BigInteger = window.BigInteger;
-const ECDSA = window.KJUR.crypto.ECDSA;
+const BigInteger = KJUR.BigInteger;
+const ECDSA = KJUR.crypto.ECDSA;
 
 const shake256 = sha3.shake256;
 const ecdsa = new ECDSA({curve: "secp256k1"});
