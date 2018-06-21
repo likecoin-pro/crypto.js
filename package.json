@@ -1,7 +1,8 @@
 {
   "name": "likecoin-crypto.js",
-  "version": "0.0.3",
-  "main": "index.js",
+  "version": "0.0.4",
+  "main": "./src/index.js",
+  "module": "./dist/bundle.cjs.js",
   "repository": "https://github.com/likecoin-pro/crypto.js.git",
   "license": "MIT",
   "scripts": {
