@@ -1,9 +1,5 @@
 const crypto = window.LikecoinCryptoJS;
 
-const SECRET = "abc";
-const PRIVATE_KEY = crypto.privateKeyBySecret(SECRET);
-const PUBLIC_KEY = crypto.publicKeyByPrivate(PRIVATE_KEY);
-
 describe("hash", function () {
     it("should generate hash for empty string", function () {
         const hash = crypto.hash("");
@@ -24,21 +20,21 @@ describe("xhash", function () {
 
 describe("privateKeyBySecret", function () {
     it("should generate private key by secret for 'abc' string", function () {
-        const privateKey = crypto.privateKeyBySecret(SECRET);
-        expect(privateKey).toEqual("0xd85f68a0dd6b2ebeb5a60b47b70d2e4b63a842ac0510116e2d52f153e535cd61");
+        const privateKey = crypto.privateKeyBySecret("abc");
+        expect(privateKey).toEqual("0x01d85f68a0dd6b2ebeb5a60b47b70d2e4b63a842ac0510116e2d52f153e535cd61");
     });
 });
 
 describe("publicKeyByPrivate", function () {
     it("should generate public key from private", function () {
-        const publicKey = crypto.publicKeyByPrivate(PRIVATE_KEY);
+        const publicKey = crypto.publicKeyByPrivate("0x01d85f68a0dd6b2ebeb5a60b47b70d2e4b63a842ac0510116e2d52f153e535cd61");
         expect(publicKey).toEqual("0x022f86f8c408c20e8bdcef6471676a2157624915355fe662b568ac5e2a2a76fed5d34d4a184176a3e4a28bac7203a860510e363601f7c8f8657067173ed83f6e");
     });
 });
 
 describe("addressByPublic", function () {
     it("should return address from public key", function () {
-        const addrHex = crypto.addressByPublic(PUBLIC_KEY);
+        const addrHex = crypto.addressByPublic("0x022f86f8c408c20e8bdcef6471676a2157624915355fe662b568ac5e2a2a76fed5d34d4a184176a3e4a28bac7203a860510e363601f7c8f8657067173ed83f6e");
         expect(addrHex).toEqual("0x9a8a9d2b5766b5c3962f4dd301c01765bdc37a6387f24250");
     });
 });
