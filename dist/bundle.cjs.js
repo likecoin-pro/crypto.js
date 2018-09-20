@@ -1094,19 +1094,26 @@ function privateKeyBySecret(secret) {
 function xhash(data) {
   var n = 200003;
   var a = new Array(n);
+  var tDeadline = +new Date() + 13e3;
+
   for (var i = 0; i < n; i++) {
     data = shake256.create(256).update(data).array();
     a[i] = data.slice(-16);
+    if (i % 512 === 0 && +new Date() > tDeadline) throw new Error("xhash: timeout-1");
   }
+  var j = 0;
   a.sort(function (a, b) {
-    for (var _i = 0; _i < 64; _i++) {
-      if (a[_i] !== b[_i]) return a[_i] < b[_i] ? -1 : 1;
+    if (++j % 512 === 0 && +new Date() > tDeadline) throw new Error("xhash: timeout-2");
+    for (var k = 0; k < 64; k++) {
+      if (a[k] !== b[k]) return a[k] < b[k] ? -1 : 1;
     }return 0;
   });
   var h512 = shake256.create(512);
-  for (var _i2 = 0; _i2 < n; _i2++) {
-    h512.update(a[_i2]);
-  }return h512.toString();
+  for (var k = 0; k < n; k++) {
+    if (k % 512 === 0 && +new Date() > tDeadline) throw new Error("xhash: timeout-3");
+    h512.update(a[k]);
+  }
+  return h512.toString();
 }
 
 function publicKeyByPrivate(prv) {

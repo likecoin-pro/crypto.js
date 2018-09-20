@@ -55,16 +55,24 @@ function privateKeyBySecret(secret) {
 function xhash(data) {
   const n = 200003;
   const a = new Array(n);
+  const tDeadline = +new Date() + 9e3;
+
   for (let i = 0; i < n; i++) {
     data = shake256.create(256).update(data).array();
     a[i] = data.slice(-16);
+    if(i%512 === 0 && +new Date() > tDeadline) throw new Error("xhash: timeout-1");
   }
+  let j = 0;
   a.sort(function (a, b) {
-    for (let i = 0; i < 64; i++) if (a[i] !== b[i]) return a[i] < b[i] ? -1 : 1;
+    if(++j%512 === 0 && +new Date() > tDeadline) throw new Error("xhash: timeout-2");
+    for (let k = 0; k < 64; k++) if (a[k] !== b[k]) return a[k] < b[k] ? -1 : 1;
     return 0;
   });
   const h512 = shake256.create(512);
-  for (let i = 0; i < n; i++) h512.update(a[i]);
+  for (let k = 0; k < n; k++) {
+    if(k%512 === 0 && +new Date() > tDeadline) throw new Error("xhash: timeout-3");
+    h512.update(a[k]);
+  }
   return h512.toString();
 }
 
